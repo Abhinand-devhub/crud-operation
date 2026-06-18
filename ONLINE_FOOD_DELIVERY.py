@@ -4,6 +4,7 @@ import time
 #data stored class...........................................................................
 class Server:
     def __init__(self):
+        self.admin={"username": "admin123", "password": "admin@26"}
         self.users=[
             {"name": "abhi12", "password": "abh123"},
             {"name": "shahil23", "password": "sha234"},
@@ -104,13 +105,14 @@ class Account():
         print('1. Update username/password\n2. Delete account\n3. Go back')
         while True:
             a=int(input('Select your option: '))
+        # update password....................................................................
             if a==1:
                 while True:
                     Username=input("Username: ")
                     Password=input("Password: ")
                     for user in self.d.users:
                         if Username==user['name'] and Password==user['password']:
-                            print('\nLogin successful\n')
+                            print('\nEnter new Username & Password\n')
                             user['name']=input("New username: ")
                             user['password']=input("New Password: ")
                             print('\nUsername/Password changed successfully\n')
@@ -124,35 +126,79 @@ class Account():
                         print('Incorrect username or password')
                         continue
                     break
+        # delete account.........................................................................
             elif a==2:
-                Username=input("Admin username: ")
-                Password=input("Admin password: ")
+                Username=input("Username: ")
+                Password=input("Password: ")
                 for user in self.d.users:
                     if Username==user['name'] and Password==user['password']:
                         self.d.users.remove(user)
                         print('\nAccount deleted successfully\n')
-                        print("To home page press '*'")
                         time.sleep(2)
                         home(),opt()
-                        break
                 break
+        # back to home.............................................................................
             elif a==3:
                 home(),opt()
                 break
+        # else condition ............................................................................
             else:
                 print('incorrect option')
         print()
 
-class Login(Account):
+class Login():
     def __init__(self, data):
         self.d= data
     def login(self):
-        pass
+        print()
+        print("1. Log-in\n2. Sign-up\n3. Admin log-in")
+        while True:
+            a=int(input('Select your option: '))
+        # user login ...........................................................................
+            if a==1:
+                print('\nUser login')
+                Username=input("Username: ")
+                Password=input("Password: ")
+                for user in self.d.users:
+                    if Username==user['name'] and Password==user['password']:
+                        print('\nLogin successful')
+                        time.sleep(2)
+                        home(),opt()
+                else:
+                    print('\nIncorrect username or password\nif you are a new user, Register to contine')
+                    time.sleep(2)
+                    self.login()
+                break
+        # register new user .........................................................................
+            elif a==2:
+                print('\nRegister as new user')
+                newuser=input("Create username: ")
+                newpass=input("Create password: ")
+                for  user in self.d.users:
+                    if newuser==user['name'] or newpass==user['password']:
+                        print("\nUsername/ Password already exist")
+                self.d.users.append({"name": newuser, "password": newpass})
+                print("Registration successful.")
+                time.sleep(2)
+                self.login()
+                break
+        # admin login ...............................................................................
+            elif a==3:
+                print('\nAdmin login')
+                Username=input("Admin Username: ")
+                Password=input("Admin Password: ")
+                if Username!=self.d.admin['username'] or Password!=self.d.admin['password']:
+                    print('\nInvalid Credentials..!!')
+
+        # else condition ............................................................................
+            else:
+                print('incorrect option')
 
 
 
 
-"""conditions and first print.........................................................................."""
+
+"""Main menu screen.........................................................................."""
 #starting page................................................................................
 def home():
     print('\nWelcome to Eat_it\n\n' \
@@ -164,7 +210,7 @@ def home():
 '   6- Exit') 
 home()
 
-#object creation & incoking function............................................................
+#object creation & invoking function............................................................
 data=Server()
 r=Restaurants(data)
 f=Foods(data)
